@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export const state = () => ({
   fullData: [],
+  requestedCurrencies: 'BTC,ETH,XRP,BCH,BSV,LTC',
 });
 
 export const mutations = {
@@ -11,9 +12,18 @@ export const mutations = {
 };
 
 export const actions = {
-  fetchFullData({ commit }) {
+  defineRequestedCurrencies({ commit }, { payload }) {
+    commit('setState', {
+      name: 'requestedCurrencies',
+      value: payload.join(','),
+    });
+  },
+
+  fetchFullData({ state, commit }) {
+    const requestedCurrencies = state.requestedCurrencies;
+
     return this.$axios
-      .$get('pricemultifull?fsyms=BTC,ETH,XRP,BCH,BSV,LTC&tsyms=USD')
+      .$get(`pricemultifull?fsyms=${requestedCurrencies}&tsyms=USD`)
       .then(response => {
         return commit('setState', {
           name: 'fullData',
@@ -31,6 +41,14 @@ export const getters = {
 
   getCurrencies(state) {
     return state.fullData['DISPLAY'];
+  },
+
+  getRequestedCurrencies(state) {
+    return state.requestedCurrencies;
+  },
+
+  getListOfRequestedCurrencies(state) {
+    return state.requestedCurrencies.split(',');
   },
 
   // getBlockByName: (state) => (blockName) => {
