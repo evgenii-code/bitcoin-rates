@@ -5,22 +5,33 @@
     </div>
 
     <div class="card__main-container">
-      <p class="card__text">Price</p>
-      <p class="card__text card__text_bold">{{ data['USD']['PRICE'] }}</p>
-      <p class="card__text">1 hour</p>
-      <p class="card__text card__text_bold">
+      <my-text class="card__text">Price</my-text>
+
+      <my-text class="card__text card__text_align_right" :bold="true">
+        {{ data['USD']['PRICE'] }}
+      </my-text>
+
+      <my-text class="card__text">1 hour</my-text>
+
+      <my-text class="card__text card__text_align_right" :bold="true">
         {{ data['USD']['CHANGEPCTHOUR'] }}%
-      </p>
-      <p class="card__text">1 day</p>
-      <p class="card__text card__text_bold">
+      </my-text>
+
+      <my-text class="card__text">1 day</my-text>
+
+      <my-text class="card__text card__text_align_right" :bold="true">
         {{ data['USD']['CHANGEPCT24HOUR'] }}%
-      </p>
+      </my-text>
     </div>
   </article>
 </template>
 
 <script>
+import mixinComponents from '@/mixins/mixinComponents';
+
 export default {
+  mixins: [mixinComponents],
+
   props: {
     currency: String,
     data: Object,
@@ -66,13 +77,12 @@ export default {
 }
 
 .card__text {
-  font-size: 16px;
+  /* font-size: 16px; */
   margin: 0;
   color: #ececec;
 }
 
-.card__text_bold {
-  font-weight: bold;
+.card__text_align_right {
   justify-self: right;
 }
 

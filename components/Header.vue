@@ -1,7 +1,12 @@
 <template>
   <header class="header">
     <div class="header__container">
-      <h1 class="header__logo">Bitcoin Rates</h1>
+      <nuxt-link to="/" v-if="$route.path !== '/'" class="header__logo"
+        >Bitcoin Rates</nuxt-link
+      >
+
+      <h1 v-else class="header__logo">Bitcoin Rates</h1>
+
       <ul class="header__links">
         <li class="header__item">
           <nuxt-link to="/" class="header__link">Main</nuxt-link>
@@ -39,6 +44,9 @@ export default {};
 .header__logo {
   font-size: 24px;
   margin: 0;
+  color: inherit;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 .header__links {

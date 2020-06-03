@@ -1,28 +1,33 @@
 <template>
   <footer class="footer">
     <div class="footer__container">
-      <p class="footer__api">
+      <my-text class="footer__api">
         Powered by
-        <a
-          href="https://min-api.cryptocompare.com/"
-          target="_blank"
+        <my-link
+          :href="'https://min-api.cryptocompare.com/'"
           class="footer__link"
-          >cryptocompare.com</a
+          >cryptocompare.com</my-link
         >
         API
-      </p>
+      </my-text>
     </div>
   </footer>
 </template>
 
 <script>
-export default {};
+import mixinComponents from '@/mixins/mixinComponents';
+
+export default {
+  mixins: [mixinComponents],
+
+  components: {},
+};
 </script>
 
 <style scoped>
 .footer {
   padding: 20px 40px;
-  min-height: 200px;
+  min-height: 100px;
   background-color: #30475e;
   color: #ececec;
 }
@@ -35,10 +40,6 @@ export default {};
   align-items: center;
 }
 
-.footer__api {
-  font-size: 14px;
-}
-
 .footer__link {
   color: #ececec;
 }
@@ -46,10 +47,6 @@ export default {};
 @media screen and (max-width: 425px) {
   .footer {
     padding: 20px 20px;
-  }
-
-  .footer__api {
-    font-size: 12px;
   }
 }
 </style>

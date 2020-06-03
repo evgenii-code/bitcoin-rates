@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="layout">
     <my-header />
     <nuxt />
     <my-footer />
@@ -16,9 +16,9 @@ export default {
     'my-footer': Footer,
   },
 
-  async fetch() {
-    await this.$store.dispatch('default/fetchFullData');
-  },
+  // async fetch() {
+  //   await this.$store.dispatch('default/fetchFullData');
+  // },
 };
 </script>
 
@@ -40,5 +40,10 @@ html {
 *:after {
   box-sizing: border-box;
   margin: 0;
+}
+
+.layout {
+  background-color: #222831;
+  color: #ececec;
 }
 </style>
