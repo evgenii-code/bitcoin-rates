@@ -1,68 +1,39 @@
 <template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        bitcoin-rates
-      </h1>
-      <h2 class="subtitle">
-        Nuxt practice
-      </h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green">
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
-    </div>
-  </div>
+  <main class="main">
+    <container class="main__container">
+      <card
+        v-for="(data, currency) in currencies"
+        :key="currency"
+        :currency="currency"
+        :data="data"
+      />
+    </container>
+  </main>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue';
+import Container from '@/components/Container';
+import Card from '@/components/Card';
 
 export default {
   components: {
-    Logo,
+    container: Container,
+    card: Card,
+  },
+
+  computed: {
+    currencies() {
+      return this.$store.getters['default/getCurrencies'];
+    },
   },
 };
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+.main {
+  background-color: #222831;
+  color: #ececec;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 </style>
