@@ -12,7 +12,7 @@
           <nuxt-link to="/" class="header__link">Main</nuxt-link>
         </li>
         <li class="header__item">
-          <nuxt-link to="/convert" class="header__link">Convert</nuxt-link>
+          <nuxt-link to="/charts" class="header__link">Charts</nuxt-link>
         </li>
         <li class="header__item">
           <nuxt-link to="/about" class="header__link">About</nuxt-link>
