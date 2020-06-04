@@ -3,6 +3,7 @@ import axios from 'axios';
 export const state = () => ({
   fullData: [],
   requestedCurrencies: 'BTC,ETH,XRP,BCH,BSV,LTC',
+  historicalData: {},
 });
 
 export const mutations = {
@@ -32,6 +33,20 @@ export const actions = {
       })
       .catch(error => console.log(error));
   },
+
+  fetchHistoricalData({ state, commit }) {
+    const requestedCurrencies = state.requestedCurrencies;
+
+    return this.$axios
+      .$get(`histoday?fsym=BTC&tsym=USD&limit=30`)
+      .then(response => {
+        return commit('setState', {
+          name: 'historicalData',
+          value: response,
+        });
+      })
+      .catch(error => console.log(error));
+  },
 };
 
 export const getters = {
@@ -49,6 +64,10 @@ export const getters = {
 
   getListOfRequestedCurrencies(state) {
     return state.requestedCurrencies.split(',');
+  },
+
+  getHistoricalData(state) {
+    return state.historicalData;
   },
 
   // getBlockByName: (state) => (blockName) => {
