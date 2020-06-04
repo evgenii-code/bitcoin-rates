@@ -1,41 +1,101 @@
 <template>
   <main class="main">
+    <loading-screen v-if="!loaded" />
     <container>
       <section class="charts">
         <h1 class="charts__title">Crypto charts</h1>
 
-        <line-chart :data="chartData" :options="chartOptions" :height="200" />
+        <line-chart
+          class="charts__data"
+          v-if="loaded"
+          :data="chartData"
+          :options="chartOptions"
+        />
       </section>
     </container>
   </main>
 </template>
 
 <script>
+import LoadingScreen from '@/components/LoadingScreen';
 import Container from '@/components/Container';
 import LineChart from '@/components/LineChart';
 import mixinComponents from '@/mixins/mixinComponents';
 
 export default {
+  async fetch() {
+    // if (this.$store.getters['default/getRequestedCurrencies'] === '') {
+    //   const availableCurrency = this.$store.getters[
+    //     'currenciesForm/getAvailableCurrency'
+    //   ];
+    //   const availableCurrencyCode = availableCurrency.map(
+    //     currency => currency.code
+    //   );
+
+    //   this.$store.dispatch('default/defineRequestedCurrencies', {
+    //     payload: availableCurrencyCode,
+    //   });
+    // }
+
+    await this.$store.dispatch('default/fetchHistoricalData');
+    this.currencies = this.$store.getters['default/getCurrencies'];
+    this.historicalData = this.$store.getters['default/getHistoricalData'];
+    this.chartData.labels = this.parseDates(this.historicalData);
+    this.chartData.datasets[0].data = this.parseValues(this.historicalData);
+    this.loaded = true;
+  },
+
   mixins: [mixinComponents],
 
   components: {
     container: Container,
     LineChart,
+    LoadingScreen,
+  },
+
+  methods: {
+    parseDates(historicalData) {
+      return historicalData['Data'].map(item => {
+        const timestamp = item['time'];
+        const dateObj = new Date(timestamp * 1000);
+        const utcString = dateObj.toLocaleDateString('ru');
+
+        return utcString;
+      });
+    },
+
+    parseValues(historicalData) {
+      return historicalData['Data'].map(item => {
+        const closeValue = +item['close'];
+
+        return closeValue;
+      });
+    },
   },
 
   data() {
     return {
+      loaded: false,
+
+      currencies: {},
+      historicalData: {},
+
       chartData: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        labels: [], // подписи
         datasets: [
           {
-            backgroundColor: '#f2a365',
-            data: [40, 15, 20, 25, 50, 100],
+            backgroundColor: '#ececec',
+            borderColor: '#f2a365',
+            lineTension: 0,
+            data: [], // значения
           },
         ],
       },
       chartOptions: {
         responsive: true,
+        maintainAspectRatio: false,
+
+        animation: false,
 
         legend: {
           display: false,
@@ -53,7 +113,7 @@ export default {
 
         tooltips: {
           intersect: false,
-          mode: 'x-axis',
+          mode: 'nearest',
           displayColors: false,
           titleAlign: 'center',
           caretSize: 5,
@@ -61,6 +121,9 @@ export default {
         },
 
         elements: {
+          line: {
+            fill: false,
+          },
           point: {
             radius: 0,
             hitRadius: 6,
@@ -73,7 +136,7 @@ export default {
           yAxes: [
             {
               ticks: {
-                beginAtZero: true,
+                beginAtZero: false,
                 fontColor: '#ececec',
               },
 
@@ -107,8 +170,17 @@ export default {
   padding-bottom: 20px;
 }
 
+.charts {
+  position: relative;
+  /* height: 60vh; */
+  height: 100%;
+}
+
 .charts__title {
   margin: 0;
   margin-bottom: 20px;
+}
+
+.charts__data {
 }
 </style>
