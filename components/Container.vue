@@ -12,9 +12,9 @@ export default {};
 .container {
   box-sizing: border-box;
   width: 100%;
-  display: grid;
+  /* display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  grid-gap: 20px;
+  grid-gap: 20px; */
 }
 
 .container_limited {
@@ -23,9 +23,9 @@ export default {};
 }
 
 @media screen and (max-width: 425px) {
-  .container {
+  /* .container {
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  }
+  } */
 
   .container_limited {
     padding: 0 20px;

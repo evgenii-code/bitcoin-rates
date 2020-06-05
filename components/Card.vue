@@ -48,11 +48,11 @@ export default {
   transition: transform 0.1s;
 }
 
-.card:hover {
+/* .card:hover {
   z-index: 2;
   transform: scale(1.2);
   box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.5);
-}
+} */
 
 .card__title-container {
   background-color: #f2a365;
