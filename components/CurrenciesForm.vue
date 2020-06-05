@@ -1,6 +1,12 @@
 <template>
   <form class="form" @submit.prevent="emitRefreshCurrencies">
-    <div class="form__options" v-if="OptionsState">
+    <div
+      class="form__options"
+      v-if="OptionsState"
+      @focusout="closeOptions"
+      tabindex="0"
+      ref="options"
+    >
       <div
         class="form__list"
         v-for="(currency, index) in getAvailableCurrency"
@@ -8,7 +14,7 @@
       >
         <input
           class="form__checkbox"
-          type="checkbox"
+          :type="type"
           :id="currency.code"
           :value="currency.code"
           v-model="checkedCurrencies"
@@ -27,7 +33,7 @@
       ]"
       @click="openOptions"
     >
-      <my-text class="form__text">{{ checkedCurrencies.join(', ') }}</my-text>
+      <my-text class="form__text">{{ showCheckedCurrencies }}</my-text>
     </div>
 
     <my-button class="form__button">Refresh</my-button>
@@ -40,6 +46,13 @@ import mixinComponents from '@/mixins/mixinComponents';
 export default {
   mixins: [mixinComponents],
 
+  props: {
+    type: {
+      type: String,
+      default: 'checkbox',
+    },
+  },
+
   data() {
     return {
       checkedCurrencies: [],
@@ -47,15 +60,32 @@ export default {
   },
 
   beforeMount() {
-    // const availableCurrency = this.$store.getters['currenciesForm/getAvailableCurrency'];
-    // this.checkedCurrencies = availableCurrency.map(currency => currency.code);
-    this.checkedCurrencies = this.$store.getters[
-      'default/getListOfRequestedCurrencies'
-    ];
-    this.refreshRequestedCurrencies();
+    this.initListOfCheckedCurrencies;
   },
 
   computed: {
+    initListOfCheckedCurrencies() {
+      const checkedCurrencies = this.getAvailableCurrency.map(
+        item => item.code
+      );
+
+      if (this.type === 'radio') {
+        this.checkedCurrencies = checkedCurrencies[0];
+      } else {
+        this.checkedCurrencies = checkedCurrencies;
+      }
+
+      this.refreshRequestedCurrencies();
+    },
+
+    showCheckedCurrencies() {
+      if (Array.isArray(this.checkedCurrencies)) {
+        return this.checkedCurrencies.join(', ');
+      }
+
+      return this.checkedCurrencies;
+    },
+
     getAvailableCurrency() {
       return this.$store.getters['currenciesForm/getAvailableCurrency'];
     },
@@ -68,7 +98,7 @@ export default {
   methods: {
     emitRefreshCurrencies() {
       if (!this.checkedCurrencies.length) {
-        console.log('Сначала выберите валюту'); // сделать красиво
+        console.log('Сначала выберите валюту');
         return;
       }
 
@@ -77,13 +107,25 @@ export default {
     },
 
     refreshRequestedCurrencies() {
-      this.$store.dispatch('default/defineRequestedCurrencies', {
-        payload: this.checkedCurrencies,
-      });
+      const payload = Array.isArray(this.checkedCurrencies)
+        ? this.checkedCurrencies
+        : [this.checkedCurrencies];
+
+      this.$store.dispatch('default/defineRequestedCurrencies', { payload });
     },
 
     openOptions() {
-      this.$store.commit('currenciesForm/toggleOptions');
+      if (this.OptionsState) return;
+
+      this.$store.commit('currenciesForm/openOptions');
+
+      this.$nextTick(function() {
+        this.$refs.options.focus();
+      });
+    },
+
+    closeOptions() {
+      this.$store.commit('currenciesForm/closeOptions');
     },
   },
 };
@@ -109,6 +151,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  z-index: 2;
+  outline: none;
 }
 
 .form__selected-options {

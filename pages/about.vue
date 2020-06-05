@@ -2,11 +2,53 @@
   <main class="main">
     <container>
       <section class="about">
-        <h1 class="about__title">About this app</h1>
+        <h1 class="about__title">This app is made for practice</h1>
+
+        <my-text class="about__text">Technology stack used: </my-text>
+
+        <ul class="about__list">
+          <li class="about__item">
+            <my-text class="about__text"
+              ><my-link :href="'https://nuxtjs.org/'">Nuxt.js</my-link></my-text
+            >
+          </li>
+          <li class="about__item">
+            <my-text class="about__text"
+              ><my-link :href="'https://vuex.vuejs.org/'"
+                >Vuex</my-link
+              ></my-text
+            >
+          </li>
+          <li class="about__item">
+            <my-text class="about__text"
+              ><my-link :href="'https://github.com/axios/axios'"
+                >Axios</my-link
+              ></my-text
+            >
+          </li>
+          <li class="about__item">
+            <my-text class="about__text"
+              ><my-link :href="'https://www.chartjs.org/'"
+                >Chart.js</my-link
+              ></my-text
+            >
+          </li>
+          <li class="about__item">
+            <my-text class="about__text"
+              ><my-link :href="'https://en.bem.info/'">BEM</my-link></my-text
+            >
+          </li>
+          <li class="about__item">
+            <my-text class="about__text">REST API</my-text>
+          </li>
+        </ul>
+
         <my-text class="about__text"
-          >This app is made for practice of Nuxt.js, Vuex and API by Evgenii
-          Osipenkov</my-text
-        >
+          >Made by
+          <my-link :href="'https://github.com/evgenii-code'"
+            >Evgenii Osipenkov</my-link
+          >
+        </my-text>
       </section>
     </container>
   </main>
@@ -35,5 +77,18 @@ export default {
 .about__title {
   margin: 0;
   margin-bottom: 20px;
+}
+
+.about__list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+.about__item {
+  margin: 0;
+  margin-left: 20px;
+  padding: 0;
 }
 </style>

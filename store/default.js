@@ -1,8 +1,6 @@
-import axios from 'axios';
-
 export const state = () => ({
   fullData: [],
-  requestedCurrencies: 'BTC,ETH,XRP,BCH,BSV,LTC',
+  requestedCurrencies: [],
   historicalData: {},
 });
 
@@ -16,12 +14,12 @@ export const actions = {
   defineRequestedCurrencies({ commit }, { payload }) {
     commit('setState', {
       name: 'requestedCurrencies',
-      value: payload.join(','),
+      value: payload,
     });
   },
 
   fetchFullData({ state, commit }) {
-    const requestedCurrencies = state.requestedCurrencies;
+    const requestedCurrencies = state.requestedCurrencies.join(',');
 
     return this.$axios
       .$get(`pricemultifull?fsyms=${requestedCurrencies}&tsyms=USD`)
@@ -35,10 +33,10 @@ export const actions = {
   },
 
   fetchHistoricalData({ state, commit }) {
-    const requestedCurrencies = state.requestedCurrencies;
+    const requestedCurrencies = state.requestedCurrencies[0];
 
     return this.$axios
-      .$get(`histoday?fsym=BTC&tsym=USD&limit=30`)
+      .$get(`histoday?fsym=${requestedCurrencies}&tsym=USD&limit=90`)
       .then(response => {
         return commit('setState', {
           name: 'historicalData',
@@ -63,16 +61,10 @@ export const getters = {
   },
 
   getListOfRequestedCurrencies(state) {
-    return state.requestedCurrencies.split(',');
+    return state.requestedCurrencies;
   },
 
   getHistoricalData(state) {
     return state.historicalData;
   },
-
-  // getBlockByName: (state) => (blockName) => {
-  //   return state.blocks.find((block) => {
-  //     block.block === blockName;
-  //   });
-  // },
 };

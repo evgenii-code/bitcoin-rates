@@ -1,5 +1,7 @@
 <template>
   <main class="main">
+    <loading-screen v-if="!loaded" />
+
     <container class="main__form-container">
       <currencies-form
         class="main__form"
@@ -19,6 +21,7 @@
 </template>
 
 <script>
+import LoadingScreen from '@/components/LoadingScreen';
 import Container from '@/components/Container';
 import Card from '@/components/Card';
 import CurrenciesForm from '@/components/CurrenciesForm';
@@ -26,7 +29,11 @@ import mixinComponents from '@/mixins/mixinComponents';
 
 export default {
   async fetch() {
-    if (this.$store.getters['default/getRequestedCurrencies'] === '') {
+    const requestedCurrencies = this.$store.getters[
+      'default/getRequestedCurrencies'
+    ];
+
+    if (requestedCurrencies.length === 0) {
       const availableCurrency = this.$store.getters[
         'currenciesForm/getAvailableCurrency'
       ];
@@ -41,6 +48,7 @@ export default {
 
     await this.$store.dispatch('default/fetchFullData');
     this.currencies = this.$store.getters['default/getCurrencies'];
+    this.loaded = true;
   },
 
   mixins: [mixinComponents],
@@ -48,12 +56,14 @@ export default {
   components: {
     container: Container,
     card: Card,
-    'currencies-form': CurrenciesForm,
+    CurrenciesForm,
+    LoadingScreen,
   },
 
   data() {
     return {
       currencies: {},
+      loaded: false,
     };
   },
 
@@ -65,7 +75,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .main {
   min-height: calc(100vh - 169px);
   padding-top: 20px;
@@ -73,10 +83,24 @@ export default {
 }
 
 .main__form-container {
+  margin: 0 auto;
   margin-bottom: 20px;
+}
+
+.main__container {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  grid-gap: 20px;
 }
 
 .main__form {
   grid-column: 1 / -1;
+}
+
+@media screen and (max-width: 425px) {
+  .main__container {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  }
 }
 </style>

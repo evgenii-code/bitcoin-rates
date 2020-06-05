@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export const state = () => ({
   isOptionsOpen: false,
   availableCurrency: [
@@ -37,8 +35,12 @@ export const state = () => ({
 });
 
 export const mutations = {
-  toggleOptions(state) {
-    return (state.isOptionsOpen = !state.isOptionsOpen);
+  openOptions(state) {
+    return (state.isOptionsOpen = true);
+  },
+
+  closeOptions(state) {
+    return (state.isOptionsOpen = false);
   },
 };
 
