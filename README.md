@@ -14,6 +14,7 @@
 
 - REST API
 
+
 **Run:**
 
 https://evgenii-code.github.io/nuxt-bitcoin-rates/
