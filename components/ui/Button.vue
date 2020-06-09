@@ -20,6 +20,7 @@ export default {};
   color: inherit;
   font-size: 24px;
   font-weight: bold;
+  outline: none;
 }
 
 @media screen and (max-width: 425px) {

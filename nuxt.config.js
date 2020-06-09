@@ -1,3 +1,12 @@
+const routerBase =
+  process.env.DEPLOY_ENV === 'GH_PAGES'
+    ? {
+        router: {
+          base: '/nuxt-bitcoin-rates/',
+        },
+      }
+    : {};
+
 export default {
   mode: 'universal',
   /*
@@ -19,6 +28,7 @@ export default {
       { rel: 'stylesheet', href: '/fonts/fonts.css' },
     ],
   },
+  ...routerBase,
   /*
    ** Customize the progress-bar color
    */
